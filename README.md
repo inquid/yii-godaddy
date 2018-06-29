@@ -59,12 +59,12 @@ print_r($response);
 ```
 Inserts a new record to a domain
 ```php
-      $response = Yii::$app->godaddy->insertRecord("domain.com",[
-    'data'=>'XX.XX.XX.XX', //IP
-     'name'=>'subdomain',
-    'ttl' => '600',
-     'type'=>'A'
-    ]);
+    $record = new \inquid\godaddy\models\Record();
+    $record->setData('XX.XXX.XXX.XX');
+    $record->setName('subdomain');
+    $record->setTtl(600);
+    $record->setType('A');
+    $response = Yii::$app->godaddy->insertRecord("domain.com",$record);
     print_r($response);
 ```
 

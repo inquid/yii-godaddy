@@ -62,6 +62,7 @@ class HttpClientV1 extends Component
     {
         $client = new Client(['baseUrl' => $this->getUrl() . '/' . $path]);
         $request = $client->createRequest();
+        $request->setFormat(Client::FORMAT_JSON);
         if ($data) {
             $request->setData($data);
         }
@@ -81,8 +82,8 @@ class HttpClientV1 extends Component
         if ($response && ($headers = $response->getHeaders())) {
             if ($headers->get('http-code') == 200 || $headers->get('http-code') == 201) {
                 $content = Json::decode($response->getContent());
-                Yii::trace(json_encode($content));
-                if ($isList && $className == "Records") {
+                Yii::trace($content);
+                if ($isList && $className == "inquid\godaddy\models\Record") {
                     $list = [];
                     foreach ($content as $row) {
                         $row['class'] = $className;
@@ -109,15 +110,21 @@ class HttpClientV1 extends Component
     protected function booleanResponse($response)
     {
         if ($response && ($headers = $response->getHeaders())) {
+            $content = Json::decode($response->getContent());
             if ($headers->get('http-code') == 200 || $headers->get('http-code') == 201) {
-                $content = Json::decode($response->getContent());
                 if ($content['response'] == 'success') {
+                    Yii::debug('success');
                     return true;
                 } elseif ($content['response'] == 'error') {
+                    Yii::error($content['message']);
                     return new Error($headers->get('http-code'), $content['message']);
                 }
             }
+            $content = Json::decode($response->getContent());
+            Yii::error($content['message']);
+            return new Error($headers->get('http-code'), $content['message']);
         }
+        Yii::error("Unkown error");
         return new Error(500);
     }
     /**
@@ -135,7 +142,7 @@ class HttpClientV1 extends Component
     {
         return [
             "Content-Type: application/json",
-            "Authorization:sso-key {$this->apiKey}:{$this->apiSecretL}"
+            "Authorization:sso-key {$this->apiKey}:{$this->apiSecret}"
         ];
     }
 }
