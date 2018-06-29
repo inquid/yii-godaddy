@@ -1,0 +1,22 @@
+{
+    "name": "inquid/yii2-godaddy",
+    "description": "Godaddy api library",
+    "type": "yii2-extension",
+    "keywords": ["yii2","extension","inquid","godaddy","domains","dns"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Inquid",
+            "email": "contact@inquid.co"
+        }
+    ],
+    "require": {
+        "yiisoft/yii2": "~2.0.0",
+        "yiisoft/yii2-httpclient": "~2.0.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "inquid\\godaddy\\": "src"
+        }
+    }
+}
